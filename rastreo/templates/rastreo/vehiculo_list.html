@@ -1,0 +1,65 @@
+{% extends "base_generic.html" %}
+
+{% block contenido %}
+  <div class="container">
+    {% if vehiculo_list %}
+    <div class="row">
+      <div id="mapid" style="width: 700px; height: 300px;"></div>
+    </div>
+    <hr>
+    <div class="row">
+      <br>
+      {% for vehiculo in vehiculo_list %}
+      <div class="card">
+        <div class="card-header">
+          <h6 class="card-title">Vehículo: {{ vehiculo.id }}</h6>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            Placa: {{ vehiculo.placa }}<br>
+            Lat: {{vehiculo.ultima_pos_lat}}<br>
+            Long: {{vehiculo.ultima_pos_long}}
+          </p>
+          <a href="{% url 'vehiculo_update' vehiculo.pk%}?next={{request.path}}" class="btn btn-info">Editar</a>
+          <a href="{% url 'vehiculo_delete' vehiculo.pk%}?next={{request.path}}" class="btn btn-warning">Borrar</a>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">Nuevo vehiculo</p>
+          <a href="{% url 'vehiculo_create'%}?next={{request.path}}" class="btn btn-primary">Agregar</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+      <div class="jumbotron">
+        <h3>No hay vehiculos registrados.</h3>
+        <a href="{% url 'vehiculo_create'%}?next={{request.path}}" class="btn btn-primary">Empieza con tu flotilla</a>
+      </div>
+      {% endif %}
+  </div> <!-- /container -->     
+  <script>
+    {% if vehiculo_list %}
+    const mymap = L.map('mapid').setView([19.349, -99.19], 11);
+    const attribution = '&copy;<a href="https://www.openstreetmap.org/">OpenStreetMap</a>contributors';
+    const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    const tiles = L.tileLayer(tileUrl, {attribution} );    
+    tiles.addTo(mymap);
+    var arreglo = []
+    {% for vehiculo in vehiculo_list %}
+    arreglo.push({
+      placa: "{{ vehiculo.placa }}",
+      latitud: {{ vehiculo.ultima_pos_lat }},
+      longitud: {{ vehiculo.ultima_pos_long }}
+    });
+    {% endfor %}
+    for(vehiculo of arreglo){
+      const marcador = L.marker([vehiculo.latitud, vehiculo.longitud]).addTo(mymap);
+      const texto = `Placa: ${vehiculo.placa} :: (${vehiculo.latitud}, ${vehiculo.longitud})`;
+      marcador.bindPopup(texto);
+    }
+
+    {% endif %}
+  </script>
+{% endblock %}

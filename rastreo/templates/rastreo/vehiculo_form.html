@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block contenido %}
+  <form action="" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+	<div class="fieldWrapper">
+	    {{ form.placa.errors }}
+	    <label for="{{ form.placa.id_for_label }}">Placa:</label>
+	    {{ form.placa }}
+	</div>
+	<div class="fieldWrapper">
+	    {{ form.ultima_pos_lat.errors }}
+	    <label for="{{ form.ultima_pos_lat.id_for_label }}">Latitud:</label>
+	    {{ form.ultima_pos_lat }}
+	</div>
+	<div class="fieldWrapper">
+	    {{ form.ultima_pos_long.errors }}
+	    <label for="{{ form.ultima_pos_long.id_for_label }}">Longitud:</label>
+	    {{ form.ultima_pos_long }}
+	</div>
+	<div class="fieldWrapper">
+	    {{ form.usuario.errors }}
+	    <label for="{{ form.usuario.id_for_label }}">Usuario:</label>
+	    {{ form.usuario }}
+	</div>
+    <input type="submit" class="btn btn-success" value="Enviar">
+  </form>
+	
+{% endblock %}

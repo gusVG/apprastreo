@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block contenido %}
+
+<h6>Borrar Vehículo</h6>
+<p>¿Está seguro de querer borrar el vehículo con placa: {{ vehiculo }}?</p>
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" class="btn btn-danger" value="Sí, borrar.">
+</form>
+
+{% endblock %}
