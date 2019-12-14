@@ -1,12 +1,27 @@
 from django.test import TestCase
 from django.urls import reverse
-
-from rastreo.models import Vehiculo
 from django.contrib.auth.models import User
+from rastreo.models import Vehiculo
+from rest_framework.test import APITestCase
+
+class VehiculoAPITestCase(APITestCase):
+    def setUp(self):
+        test_usuario = User.objects.create_user(username='usuario', password='contrasenia')
+        test_usuario.save()
+        
+        vehiculo = Vehiculo.objects.create(
+            placa='ZXC678',
+            ultima_pos_lat=19.123,
+            ultima_pos_long=-99321,
+            usuario=test_usuario,
+        )
+
+    def test_single_user(self):
+        cuenta_usuarios = User.objects.count()
+        self.assertEqual(cuenta_usuarios, 1)
 
 class VehiculosByUserListViewTest(TestCase):
     def setUp(self):
-        print("TEST...")
         test_usuario1 = User.objects.create_user(username='usuario1', password='contrasenia1')
         test_usuario2 = User.objects.create_user(username='usuario2', password='contrasenia2')
 

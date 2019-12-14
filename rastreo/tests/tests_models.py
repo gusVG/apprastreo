@@ -1,15 +1,12 @@
 from django.test import TestCase
-
+from django.contrib.auth.models import User
 from rastreo.models import Vehiculo
 
 class VehiculoModelTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        Vehiculo.objects.create(placa='ASD123QWE', ultima_pos_lat=19.349, ultima_pos_long=-99.19)
-
     def setUp(self):
-        print("PROBANDO...")
-        pass
+        test_usuario = User.objects.create_user(username='usuario', password='contrasenia')
+        test_usuario.save()
+        Vehiculo.objects.create(placa='ASD123QWE', ultima_pos_lat=19.349, ultima_pos_long=-99.19, usuario=test_usuario)
 
     def test_placa_label(self):
         vehiculo = Vehiculo.objects.get(id=1)

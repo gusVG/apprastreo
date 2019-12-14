@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import Vehiculo
 
 class UserSerializer(serializers.Serializer):
 	id = serializers.ReadOnlyField()
@@ -17,5 +18,16 @@ class UserSerializer(serializers.Serializer):
 		qs = User.objects.filter(username__iexact=data)
 		if qs.exists():
 			raise serializers.ValidationError("Este nombre ya se está utilizando")
-		else:
-			return data
+		return data
+
+class VehiculoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Vehiculo
+		fields = [
+			'pk',
+			'placa',
+			'ultima_pos_lat',
+			'ultima_pos_long',
+			'usuario'
+		]
+		read_only_fields = ['pk', 'usuario']
